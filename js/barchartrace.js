@@ -115,7 +115,7 @@ function createBarChartRace(data, top_n, tickDuration) {
         .attr('class', 'label')
         .attr('x', d => x(d.value) - 8)
         .attr('y', d => y(d.rank) + ((y(1) - y(0)) / 2) + 1)
-        .style('text-anchor', 'end')
+        .style('text-anchor', 'start')
         .html(d => d.name);
 
     svg.selectAll('text.valueLabel')
@@ -197,9 +197,9 @@ function createBarChartRace(data, top_n, tickDuration) {
 
         labels.enter().append('text')
             .attr('class', 'label')
-            .attr('x', d => x(d.value) - 8)
+            .attr('x', d => 1)
             .attr('y', d => y(top_n + 1) + ((y(1) - y(0)) / 2))
-            .style('text-anchor', 'end')
+            .style('text-anchor', 'start')
             .html(d => d.name)
             .transition()
             .duration(tickDuration)
@@ -209,14 +209,14 @@ function createBarChartRace(data, top_n, tickDuration) {
         labels.transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('x', d => x(d.value) - 8)
+            .attr('x', d => 1)
             .attr('y', d => y(d.rank) + ((y(1) - y(0)) / 2) + 1);
 
         labels.exit()
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('x', d => x(d.value) - 8)
+            .attr('x', d => 1)
             .attr('y', d => y(top_n + 1)).remove();
 
         // update value labels
