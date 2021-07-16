@@ -71,7 +71,7 @@ text.timeText {
 }
 
 .tick text {
-    fill: #6f6f6f;
+    fill: var(--colorTick);
 }
 
 .progressBar {

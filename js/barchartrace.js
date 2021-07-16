@@ -1,6 +1,35 @@
+function setDefaultColor(backgroundPath) {
+    let chartDiv = document.getElementById("chartDiv");
+    if (backgroundPath) {
+        document.getElementById('colorLabelValue').value = '#ff0000';
+        document.getElementById('colorTick').value = '#ff0000';
+        document.getElementById('colorTimeText').value = '#ff0000';
+        document.getElementById('colorGraphTitle').value = '#ff0000';
+        backgroundImage = document.getElementById('backgroundImage').value
+        chartDiv.style.backgroundImage = `url(${backgroundImage})`
+        chartDiv.style.backgroundSize = 'cover'
+    } else {
+        document.getElementById('colorLabelValue').value = '#000000';
+        document.getElementById('colorTick').value = '#000000';
+        document.getElementById('colorTimeText').value = '#000000';
+        document.getElementById('colorGraphTitle').value = '#000000';
+        // backgroundImage = document.getElementById('backgroundImage').files[0].name
+        chartDiv.style.backgroundImage = 'none'
+    }
+}
+
 function createBarChartRace(data, top_n, tickDuration) {
     var data = data;
     let chartDiv = document.getElementById("chartDiv");
+    let colorLabelValue = document.getElementById('colorLabelValue').value;
+    let colorTick = document.getElementById('colorTick').value;
+    let colorTimeText = document.getElementById('colorTimeText').value;
+    let colorGraph = document.getElementById('colorGraphTitle').value;
+
+
+    document.documentElement.style.setProperty('--colorTick', colorTick)
+    document.getElementById('graph-title').style.color = colorGraph
+
     chartDiv.textContent = '';
     let width = chartDiv.clientWidth;
     let height = chartDiv.clientHeight - 50;
@@ -27,7 +56,7 @@ function createBarChartRace(data, top_n, tickDuration) {
     function getRowData(data, column_names, row_index) {
         const row = data[row_index];
         let new_data = column_names.map((name) => {
-            return {name: name, value: row[name]}
+            return { name: name, value: row[name] }
         });
         new_data = new_data.sort((a, b) => b.value - a.value).slice(0, top_n);
         new_data.forEach((d, i) => {
@@ -115,7 +144,7 @@ function createBarChartRace(data, top_n, tickDuration) {
         .attr('class', 'label')
         .attr('x', d => x(d.value) - 8)
         .attr('y', d => y(d.rank) + ((y(1) - y(0)) / 2) + 1)
-        .style('text-anchor', 'start')
+        .style('text-anchor', 'end')
         .html(d => d.name);
 
     svg.selectAll('text.valueLabel')
@@ -150,11 +179,13 @@ function createBarChartRace(data, top_n, tickDuration) {
         .attr('x', width - margin.right)
         .attr('y', height - margin.bottom - 5)
         .style('text-anchor', 'end')
+        .style('fill', colorTimeText)
         .html(d3.timeFormat("%B %d, %Y")(time));
 
     // draw the updated graph with transitions
     function drawGraph() {
         // update xAxis with new domain
+
         x.domain([0, d3.max(row_data, d => d.value)]);
         svg.select('.xAxis')
             .transition()
@@ -197,9 +228,9 @@ function createBarChartRace(data, top_n, tickDuration) {
 
         labels.enter().append('text')
             .attr('class', 'label')
-            .attr('x', d => 1)
+            .attr('x', d => x(d.value) - 8)
             .attr('y', d => y(top_n + 1) + ((y(1) - y(0)) / 2))
-            .style('text-anchor', 'start')
+            .style('text-anchor', 'end')
             .html(d => d.name)
             .transition()
             .duration(tickDuration)
@@ -209,14 +240,14 @@ function createBarChartRace(data, top_n, tickDuration) {
         labels.transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('x', d => 1)
+            .attr('x', d => x(d.value) - 8)
             .attr('y', d => y(d.rank) + ((y(1) - y(0)) / 2) + 1);
 
         labels.exit()
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('x', d => 1)
+            .attr('x', d => x(d.value) - 8)
             .attr('y', d => y(top_n + 1)).remove();
 
         // update value labels
@@ -226,6 +257,7 @@ function createBarChartRace(data, top_n, tickDuration) {
         valueLabels
             .enter()
             .append('text')
+            .style('fill', colorLabelValue)
             .attr('class', 'valueLabel')
             .attr('x', d => x(d.value) + 5)
             .attr('y', d => y(top_n + 1))
@@ -237,6 +269,7 @@ function createBarChartRace(data, top_n, tickDuration) {
 
         valueLabels
             .transition()
+            .style('fill', colorLabelValue)
             .duration(tickDuration)
             .ease(d3.easeLinear)
             .attr('x', d => x(d.value) + 5)
@@ -252,6 +285,7 @@ function createBarChartRace(data, top_n, tickDuration) {
         valueLabels
             .exit()
             .transition()
+            .style('fill', colorLabelValue)
             .duration(tickDuration)
             .ease(d3.easeLinear)
             .attr('x', d => x(d.value) + 5)
