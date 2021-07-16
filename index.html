@@ -3,7 +3,7 @@
 
 <head>
   <title>
-    FabDev | Bar chart race generator
+    Bar chart race generator
   </title>
   <meta property="og:title" content="Opensource bar chart race generator">
   <meta property="og:description"
@@ -316,6 +316,7 @@
           this.fileplaceholder = this.file.name;
           Papa.parse(self.file, {
             header: true,
+            encoding: "UTF-8",
             skipEmptyLines: true,
             complete: function (results) {
               if (Object.keys(results.data[0]).length === 3) {
@@ -350,8 +351,7 @@
             this.tickDuration = self.duration / self.csv_data.length * 1000
             let chartDiv = document.getElementById("chartDiv");
             var data = JSON.parse(JSON.stringify(self.csv_data))
-            console.log(self.csv_data)
-            self.interval = createBarChartRace(self.csv_data, self.top_n, self.tickDuration);
+            self.interval = createBarChartRace(data, self.top_n, self.tickDuration);
           }
 
           self.errors = [];
