@@ -30,8 +30,15 @@ label {
 }
 
 .btn-outline-primary.disabled, .btn-outline-primary:disabled {
+    Font-weight: bold;
     color: #50a1ff;
     background-color: transparent;
+}
+
+.btn-primary {
+    Font-weight: bold;
+    color: white;
+    background-color: #50a1ff;
 }
 
 .btn {
@@ -51,7 +58,7 @@ text {
 
 text.valueLabel {
     font-weight: 300;
-    fill: #505050;
+    fill: var(--colorValueLabel);
     dominant-baseline: middle;
 }
 
@@ -102,6 +109,11 @@ text.label {
     text-anchor: start;
 }
 
+.table td {
+    width: 170px;
+    text-align:center;
+    vertical-align: middle
+}
 
 
 .section {

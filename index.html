@@ -7,14 +7,14 @@
   </title>
   <meta property="og:title" content="Opensource bar chart race generator">
   <meta property="og:description"
-    content="Generate your own bar chart race from a csv file thanks to this open source tool made by FabDev">
-  <meta property="og:image" content="https://fabdevgit.github.io/barchartrace/css/demo.png">
-  <meta property="og:url" content="https://fabdevgit.github.io/barchartrace/">
+    content="Generate your own bar chart race from a csv file thanks to this open source tool made by Mata, Extended from FabDevGit">
+  <meta property="og:image" content="https://github.com/pdkhanh/racing-barcss/demo.png">
+  <meta property="og:url" content="https://github.com/pdkhanh/racing-bar">
   <meta name="twitter:card" content="summary_large_image">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description"
-    content="Generate your own bar chart race from a csv file thanks to this open source tool made by FabDev">
+    content="Generate your own bar chart race from a csv file thanks to this open source tool made by Mata, Extended from FabDevGit">
   <meta name="keywords" content="Opensource bar chart race generator">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
@@ -41,7 +41,7 @@
 
 <body>
   <main class="main-content" id="app">
-    <a href="https://github.com/FabDevGit/barchartrace" class="github-corner" aria-label="View source on GitHub">
+    <a href="https://github.com/pdkhanh/racing-bar" class="github-corner" aria-label="View source on GitHub">
       <svg width="80" height="80" viewBox="0 0 250 250"
         style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;z-index: 100;"
         aria-hidden="true">
@@ -129,26 +129,27 @@
                   <tbody>
                     <tr>
                       <td>Background</td>
-                      <td><input type="text" id="backgroundImage" placeholder="URL or Browse local file"
+                      <td>
+                        <input style="width: 93%;" type="text" id="backgroundImage" placeholder="URL or Browse local file"
                           onchange="setDefaultColor(this.value)">
                         <input type="file" id="backgroundImageFile" onchange="setBackgroundImageFile(this.value)">
                       </td>
                     </tr>
                     <tr>
                       <td>Text Label Color</td>
-                      <td><input type="color" id="colorLabelValue"></td>
+                      <td><input type="color" id="colorValueLabel" onchange="changeColor(this)"></td>
                     </tr>
                     <tr>
                       <td>Timeline Color</td>
-                      <td><input type="color" id="colorTimeline"></td>
+                      <td><input type="color" id="colorTimeline" onchange="changeColor(this)"></td>
                     </tr>
                     <tr>
                       <td>Current Time Color</td>
-                      <td><input type="color" id="colorCurrentTime"></td>
+                      <td><input type="color" id="colorCurrentTime" onchange="changeColor(this)"></td>
                     </tr>
                     <tr>
                       <td>Graph Title</td>
-                      <td><input type="color" id="colorGraphTitle"></td>
+                      <td><input type="color" id="colorGraphTitle" onchange="changeColor(this)"></td>
                     </tr>
                   </tbody>
                 </table>

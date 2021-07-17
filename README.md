@@ -1,6 +1,6 @@
 # barchartrace
 **Online bar chart race generator** :
-[https://fabdevgit.github.io/barchartrace/](https://fabdevgit.github.io/barchartrace/)
+[https://github.com/pdkhanh/racing-bar](https://github.com/pdkhanh/racing-bar)
 
 ## Accepted csv formats
 input data should be in a csv file.
