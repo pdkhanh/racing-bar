@@ -63,7 +63,7 @@ text.timeText {
 
 .xAxis > .tick line {
     shape-rendering: CrispEdges;
-    stroke: #cecece;
+    stroke: var(--colorTimeline);
 }
 
 .xAxis > .tick line.origin {
@@ -71,7 +71,7 @@ text.timeText {
 }
 
 .tick text {
-    fill: var(--colorTick);
+    fill: var(--colorTimeline);
 }
 
 .progressBar {

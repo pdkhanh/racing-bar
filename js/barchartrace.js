@@ -2,19 +2,29 @@ function setDefaultColor(backgroundPath) {
     let chartDiv = document.getElementById("chartDiv");
     if (backgroundPath) {
         document.getElementById('colorLabelValue').value = '#ff0000';
-        document.getElementById('colorTick').value = '#ff0000';
-        document.getElementById('colorTimeText').value = '#ff0000';
+        document.getElementById('colorTimeline').value = '#ff0000';
+        document.getElementById('colorCurrentTime').value = '#ff0000';
         document.getElementById('colorGraphTitle').value = '#ff0000';
         backgroundImage = document.getElementById('backgroundImage').value
         chartDiv.style.backgroundImage = `url(${backgroundImage})`
         chartDiv.style.backgroundSize = 'cover'
     } else {
         document.getElementById('colorLabelValue').value = '#000000';
-        document.getElementById('colorTick').value = '#000000';
-        document.getElementById('colorTimeText').value = '#000000';
+        document.getElementById('colorTimeline').value = '#000000';
+        document.getElementById('colorCurrentTime').value = '#000000';
         document.getElementById('colorGraphTitle').value = '#000000';
         // backgroundImage = document.getElementById('backgroundImage').files[0].name
         chartDiv.style.backgroundImage = 'none'
+    }
+}
+
+function setBackgroundImageFile(backgroundPath) {
+    if (backgroundPath) {
+        path = document.getElementById('backgroundImageFile').files[0].name
+        document.getElementById('backgroundImage').value = path
+        setDefaultColor(path);
+    } else {
+        setDefaultColor(backgroundPath);
     }
 }
 
@@ -22,12 +32,12 @@ function createBarChartRace(data, top_n, tickDuration) {
     var data = data;
     let chartDiv = document.getElementById("chartDiv");
     let colorLabelValue = document.getElementById('colorLabelValue').value;
-    let colorTick = document.getElementById('colorTick').value;
-    let colorTimeText = document.getElementById('colorTimeText').value;
+    let colorTimeline = document.getElementById('colorTimeline').value;
+    let colorCurrentTime = document.getElementById('colorCurrentTime').value;
     let colorGraph = document.getElementById('colorGraphTitle').value;
 
 
-    document.documentElement.style.setProperty('--colorTick', colorTick)
+    document.documentElement.style.setProperty('--colorTimeline', colorTimeline)
     document.getElementById('graph-title').style.color = colorGraph
 
     chartDiv.textContent = '';
@@ -176,10 +186,10 @@ function createBarChartRace(data, top_n, tickDuration) {
 
     let timeText = svg.append('text')
         .attr('class', 'timeText')
-        .attr('x', width - margin.right)
-        .attr('y', height - margin.bottom - 5)
+        .attr('x', width - margin.right - 50)
+        .attr('y', height - margin.bottom - 15)
         .style('text-anchor', 'end')
-        .style('fill', colorTimeText)
+        .style('fill', colorCurrentTime)
         .html(d3.timeFormat("%B %d, %Y")(time));
 
     // draw the updated graph with transitions

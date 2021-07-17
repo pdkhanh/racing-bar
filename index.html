@@ -129,19 +129,22 @@
                   <tbody>
                     <tr>
                       <td>Background</td>
-                      <td><input type="text" id="backgroundImage" onchange="setDefaultColor(this.value)"></td>
+                      <td><input type="text" id="backgroundImage" placeholder="URL or Browse local file"
+                          onchange="setDefaultColor(this.value)">
+                        <input type="file" id="backgroundImageFile" onchange="setBackgroundImageFile(this.value)">
+                      </td>
                     </tr>
                     <tr>
                       <td>Text Label Color</td>
                       <td><input type="color" id="colorLabelValue"></td>
                     </tr>
                     <tr>
-                      <td>Tick Color</td>
-                      <td><input type="color" id="colorTick"></td>
+                      <td>Timeline Color</td>
+                      <td><input type="color" id="colorTimeline"></td>
                     </tr>
                     <tr>
-                      <td>Time Text Color</td>
-                      <td><input type="color" id="colorTimeText"></td>
+                      <td>Current Time Color</td>
+                      <td><input type="color" id="colorCurrentTime"></td>
                     </tr>
                     <tr>
                       <td>Graph Title</td>
