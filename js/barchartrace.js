@@ -48,6 +48,26 @@ function setBackgroundImageFile(backgroundPath) {
         setDefaultColor(backgroundPath);
     }
 }
+icon = null;
+xLabel = -5
+xLabelValue = 5
+function setIconPath(iconPath){
+    if (iconPath) {
+        file = document.getElementById('iconFile')
+        image = URL.createObjectURL(file.files[0]);
+        icon = image
+        xLabel = -30
+        xLabelValue = 13
+    } else {
+        xLabel = -13
+        xLabelValue = 5
+        icon = null
+    }
+}
+
+function setIconUrl(iconUrl){
+    icon = iconUrl
+}
 
 function createBarChartRace(data, top_n, tickDuration) {
     var data = data;
@@ -66,11 +86,11 @@ function createBarChartRace(data, top_n, tickDuration) {
     let height = chartDiv.clientHeight - 50;
 
     let svg = d3.select(chartDiv).append("svg")
-        .attr("width", width)
+        .attr("width", width + 31)
         .attr("height", height);
 
     let timeline_svg = d3.select(chartDiv).append("svg")
-        .attr("width", width)
+        .attr("width", width + 31)
         .attr("height", 50);
 
     const margin = {
@@ -186,6 +206,18 @@ function createBarChartRace(data, top_n, tickDuration) {
         .attr('y', d => y(d.rank) + ((y(1) - y(0)) / 2) + 1)
         .text(d => d3.format(',.0f')(d.lastValue));
 
+
+    if (icon) {
+        svg.selectAll('image.icon')
+            .data(row_data, d => d.name)
+            .enter()
+            .append('image')
+            .attr('class', 'icon')
+            .attr('x', d => x(d.value) + 5)
+            .attr('y', d => y(d.rank) + ((y(1) - y(0)) / 2) + 1)
+            .attr("xlink:href", icon)
+    }
+
     // svg.append('rect')
     //     .attr('y', height - margin.bottom)
     //     .attr('width', width)
@@ -267,7 +299,7 @@ function createBarChartRace(data, top_n, tickDuration) {
 
         labels.enter().append('text')
             .attr('class', 'label')
-            .attr('x', d => x(d.value) - 8)
+            .attr('x', d => x(d.value) + xLabel)
             .attr('y', d => y(top_n + 1) + ((y(1) - y(0)) / 2))
             .style('text-anchor', 'end')
             .html(d => d.name)
@@ -279,25 +311,24 @@ function createBarChartRace(data, top_n, tickDuration) {
         labels.transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('x', d => x(d.value) - 8)
+            .attr('x', d => x(d.value) + xLabel)
             .attr('y', d => y(d.rank) + ((y(1) - y(0)) / 2) + 1);
 
         labels.exit()
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('x', d => x(d.value) - 8)
+            .attr('x', d => x(d.value) + xLabel)
             .attr('y', d => y(top_n + 1)).remove();
 
         // update value labels
-
         let valueLabels = svg.selectAll('.valueLabel').data(row_data, d => d.name);
 
         valueLabels
             .enter()
             .append('text')
             .attr('class', 'valueLabel')
-            .attr('x', d => x(d.value) + 5)
+            .attr('x', d => x(d.value) + xLabelValue)
             .attr('y', d => y(top_n + 1))
             .text(d => d3.format(',.0f')(d.lastValue))
             .transition()
@@ -309,7 +340,7 @@ function createBarChartRace(data, top_n, tickDuration) {
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('x', d => x(d.value) + 5)
+            .attr('x', d => x(d.value) + xLabelValue)
             .attr('y', d => y(d.rank) + ((y(1) - y(0)) / 2) + 1)
             .tween("text", function (d) {
                 let i = d3.interpolateNumber(d.lastValue, d.value);
@@ -323,8 +354,45 @@ function createBarChartRace(data, top_n, tickDuration) {
             .transition()
             .duration(tickDuration)
             .ease(d3.easeLinear)
-            .attr('x', d => x(d.value) + 5)
+            .attr('x', d => x(d.value) + xLabelValue)
             .attr('y', d => y(top_n + 1)).remove()
+
+
+        // update icon labels
+        if (icon) {
+            console.log(icon)
+            xValue = -23
+            yValue = -16
+            let iconValue = svg.selectAll('.icon').data(row_data, d => d.name);
+
+            iconValue
+                .enter()
+                .append('image')
+                .attr('class', 'icon')
+                .attr('x', d => x(d.value) + xValue)
+                .attr('y', d => y(top_n + yValue))
+                .text(d => d3.format(',.0f')(d.lastValue))
+                .transition()
+                .duration(tickDuration)
+                .ease(d3.easeLinear)
+                .attr('y', d => y(d.rank) + ((y(1) - y(0)) / 2) + 1);
+
+            iconValue
+                .transition()
+                .duration(tickDuration)
+                .ease(d3.easeLinear)
+                .attr('x', d => x(d.value) + xValue)
+                .attr('y', d => y(d.rank) + ((y(1) - y(0)) / 2) + yValue)
+                .attr("xlink:href", icon)
+
+            iconValue
+                .exit()
+                .transition()
+                .duration(tickDuration)
+                .ease(d3.easeLinear)
+                .attr('x', d => x(d.value) + xValue)
+                .attr('y', d => y(top_n + 1)).remove()
+        }
 
         // update time label and progress bar
         d3.select('.progressBar')

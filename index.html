@@ -105,22 +105,22 @@
                 <table class="table table-bordered">
                   <tbody>
                     <tr>
-                      <td>StackOverflow questions per language</td>
-                      <td><a href="#" @click.prevent="loadExample('stackoverflow')">load data</a></td>
+                      <td style="width: 500px; text-align: left;">StackOverflow questions per language</td>
+                      <td><a href="#" @click.prevent="loadExample('stackoverflow')">Load data</a></td>
                       <td><a href="datasets/stackoverflow.csv">Download</a></td>
                     </tr>
                     <tr>
-                      <td>Total cases of COVID-19 per country</td>
-                      <td><a href="" @click.prevent="loadExample('covid19')">load data</a></td>
+                      <td style="text-align: left;">Total cases of COVID-19 per country</td>
+                      <td><a href="" @click.prevent="loadExample('covid19')">Load data</a></td>
                       <td><a href="datasets/covid19-data.csv">Download</a></td>
                     </tr>
                     <tr>
-                      <td>ATP Tennis ranking</td>
-                      <td><a href="" @click.prevent="loadExample('tennis')">load data</a></td>
+                      <td style="text-align: left;">ATP Tennis ranking</td>
+                      <td><a href="" @click.prevent="loadExample('tennis')">Load data</a></td>
                       <td><a href="datasets/tennis.csv">Download</a></td>
                     <tr>
-                      <td>CO2 Emissions per country</td>
-                      <td><a href="" @click.prevent="loadExample('co2')">load data</a></td>
+                      <td style="text-align: left;">CO2 Emissions per country</td>
+                      <td><a href="" @click.prevent="loadExample('co2')">Load data</a></td>
                       <td><a href="datasets/co2.csv">Download</a></td>
                     </tr>
                   </tbody>
@@ -130,9 +130,17 @@
                     <tr>
                       <td>Background</td>
                       <td>
-                        <input style="width: 93%;" type="text" id="backgroundImage" placeholder="URL or Browse local file"
-                          onchange="setDefaultColor(this.value)">
+                        <input style="width: 90%;" type="text" id="backgroundImage"
+                          placeholder="URL or Browse local file" onchange="setDefaultColor(this.value)">
                         <input type="file" id="backgroundImageFile" onchange="setBackgroundImageFile(this.value)">
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Icon</td>
+                      <td>
+                        <input style="width: 90%;" type="text" id="icon" placeholder="URL or Browse local file"
+                          onchange="setIconUrl(this.value)">
+                        <input type="file" id="iconFile" onchange="setIconPath(this.value)">
                       </td>
                     </tr>
                     <tr>
