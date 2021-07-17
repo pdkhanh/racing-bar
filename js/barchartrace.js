@@ -209,10 +209,18 @@ function createBarChartRace(data, top_n, tickDuration) {
     let timeText = svg.append('text')
         .attr('class', 'timeText')
         .attr('x', width - margin.right - 50)
-        .attr('y', height - margin.bottom - 15)
+        .attr('y', height - margin.bottom - 25)
         .style('text-anchor', 'end')
         .style('fill', colorCurrentTime)
         .html(d3.timeFormat("%B %d, %Y")(time));
+
+    let totalText = svg.append('text')
+        .attr('class', 'timeText')
+        .attr('x', width - margin.right - 50)
+        .attr('y', height - margin.bottom - 65)
+        .style('text-anchor', 'end')
+        .style('fill', colorCurrentTime)
+        .html(0);
 
     // draw the updated graph with transitions
     function drawGraph() {
@@ -310,7 +318,6 @@ function createBarChartRace(data, top_n, tickDuration) {
                 };
             });
 
-
         valueLabels
             .exit()
             .transition()
@@ -329,8 +336,21 @@ function createBarChartRace(data, top_n, tickDuration) {
         //     d3.select('.timeText').html(d3.timeFormat("%B %d, %Y")(time))
         // timeText.html(d3.timeFormat("%B %d, %Y")(time))
         // })
+
         timeText.html(d3.timeFormat("%B %d, %Y")(time))
 
+        //Display total number
+        total = row_data.reduce((a, b) => a + (b['value'] || 0), 0);
+        lastTotal = row_data.reduce((a, b) => a + (b['lastValue'] || 0), 0);
+        totalText.transition()
+            .duration(tickDuration)
+            .ease(d3.easeLinear)
+            .tween("text", function (d) {
+                let i = d3.interpolateNumber(lastTotal, total);
+                return function (t) {
+                    this.textContent = 'Total: ' + d3.format(',.0f')(i(t));
+                };
+            });
     }
 
     // loop
