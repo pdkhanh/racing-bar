@@ -5,8 +5,7 @@ function setDefaultColor(backgroundPath) {
         document.getElementById('colorTimeline').value = '#ff0000';
         document.getElementById('colorCurrentTime').value = '#ff0000';
         document.getElementById('colorGraphTitle').value = '#ff0000';
-        backgroundImage = document.getElementById('backgroundImage').value
-        chartDiv.style.backgroundImage = `url(${backgroundImage})`
+        chartDiv.style.backgroundImage = `url(${backgroundPath})`
         chartDiv.style.backgroundSize = 'cover'
     } else {
         document.getElementById('colorLabelValue').value = '#000000';
@@ -20,9 +19,9 @@ function setDefaultColor(backgroundPath) {
 
 function setBackgroundImageFile(backgroundPath) {
     if (backgroundPath) {
-        path = document.getElementById('backgroundImageFile').files[0].name
-        document.getElementById('backgroundImage').value = path
-        setDefaultColor(path);
+        file = document.getElementById('backgroundImageFile')
+        image = URL.createObjectURL(file.files[0]);
+        setDefaultColor(image);
     } else {
         setDefaultColor(backgroundPath);
     }
