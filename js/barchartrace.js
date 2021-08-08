@@ -74,6 +74,7 @@ function setIconUrl(iconUrl){
         xLabelValue = 5
         icon = null
     }
+    icon = iconUrl
 }
 
 function createBarChartRace(data, top_n, tickDuration) {
