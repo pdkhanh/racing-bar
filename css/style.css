@@ -73,7 +73,7 @@ image.icon {
 text.timeText {
     font-size: 20px;
     font-weight: 700;
-    fill: #505050;
+    fill: var(--colorCurrentTime);
 }
 
 .xAxis > .tick line {

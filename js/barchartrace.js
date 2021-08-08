@@ -21,8 +21,7 @@ function changeColor(input) {
     colorValue = input.value
     switch (input.id) {
         case "colorCurrentTime": {
-            element = document.getElementsByClassName('timeText')[0]
-            if (element) element.style.setProperty('fill', colorValue)
+            document.documentElement.style.setProperty('--colorCurrentTime', colorValue)
             break;
         }
         case "colorTimeline": {
@@ -74,7 +73,6 @@ function createBarChartRace(data, top_n, tickDuration) {
     let chartDiv = document.getElementById("chartDiv");
     let colorValueLabel = document.getElementById('colorValueLabel').value;
     let colorTimeline = document.getElementById('colorTimeline').value;
-    let colorCurrentTime = document.getElementById('colorCurrentTime').value;
     let colorGraph = document.getElementById('colorGraphTitle').value;
 
     document.documentElement.style.setProperty('--colorValueLabel', colorValueLabel)
@@ -243,7 +241,6 @@ function createBarChartRace(data, top_n, tickDuration) {
         .attr('x', width - margin.right - 50)
         .attr('y', height - margin.bottom - 25)
         .style('text-anchor', 'end')
-        .style('fill', colorCurrentTime)
         .html(d3.timeFormat("%B %d, %Y")(time));
 
     let totalText = svg.append('text')
@@ -251,7 +248,6 @@ function createBarChartRace(data, top_n, tickDuration) {
         .attr('x', width - margin.right - 50)
         .attr('y', height - margin.bottom - 65)
         .style('text-anchor', 'end')
-        .style('fill', colorCurrentTime)
         .html(0);
 
     // draw the updated graph with transitions

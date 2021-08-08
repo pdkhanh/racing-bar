@@ -104,9 +104,9 @@
                       <td><a href="datasets/stackoverflow.csv">Download</a></td>
                     </tr>
                     <tr>
-                      <td style="text-align: left;">Total cases of COVID-19 per country</td>
-                      <td><a href="" @click.prevent="loadExample('covid19')">Load data</a></td>
-                      <td><a href="datasets/covid19-data.csv">Download</a></td>
+                      <td style="text-align: left;">Covid at Viet Nam</td>
+                      <td><a href="" @click.prevent="loadExample('covidVN')">Load data</a></td>
+                      <td><a href="datasets/covidVN.csv">Download</a></td>
                     </tr>
                     <tr>
                       <td style="text-align: left;">ATP Tennis ranking</td>
@@ -286,29 +286,29 @@
   <script>
     // settings for the example data
     const settings = {
-      "covid19": {
+      "covidVN": {
         "duration": 30,
         "top_n": 10,
-        "title": "Total cases of COVID-19 per country",
-        "url": "https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/covid19-data.csv"
+        "title": "Covid at Viet Nam",
+        "url": "https://raw.githubusercontent.com/pdkhanh/racing-bar/master/datasets/covidVN.csv"
       },
       "stackoverflow": {
         "duration": 30,
         "top_n": 10,
         "title": "StackOverflow questions per language",
-        "url": "https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/stackoverflow.csv"
+        "url": "https://raw.githubusercontent.com/pdkhanh/racing-bar/master/datasets/stackoverflow.csv"
       },
       "tennis": {
         "duration": 150,
         "top_n": 10,
         "title": "ATP tennis ranking",
-        "url": "https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/tennis.csv"
+        "url": "https://raw.githubusercontent.com/pdkhanh/racing-bar/master/datasets/tennis.csv"
       },
       "co2": {
         "duration": 30,
         "top_n": 10,
         "title": "CO2 Emissions from Fossil Fuels per capita, between 1950 and 2014 (in metric tons)",
-        "url": "https://raw.githubusercontent.com/FabDevGit/barchartrace/master/datasets/co2.csv"
+        "url": "https://raw.githubusercontent.com/pdkhanh/racing-bar/master/datasets/co2.csv"
       }
     }
 
@@ -326,7 +326,7 @@
         fileplaceholder: "Choose file"
       },
       created: async function () {
-        this.loadExample('stackoverflow')
+        this.loadExample('covidVN')
       },
       methods: {
         loadExample: async function (setting_name) {
@@ -343,7 +343,8 @@
                 results.data = reshapeData(results.data)
               }
               self.csv_data = results.data;
-              self.interval = createBarChartRace(self.csv_data, self.top_n, self.tickDuration);
+              let data = JSON.parse(JSON.stringify(self.csv_data))
+              self.interval = createBarChartRace(data, self.top_n, self.tickDuration);
               window.scrollTo({ top: $("#chart-card").offset().top - 10, behavior: 'smooth' });
             }
           })
@@ -362,7 +363,9 @@
               }
               self.csv_data = results.data;
               console.log(self.csv_data)
-              self.top_n = Math.min(20, Object.keys(self.csv_data[0]).length - 1)
+              self.top_n = Math.min(10, Object.keys(self.csv_data[0]).length - 1)
+              var data = JSON.parse(JSON.stringify(self.csv_data))
+              self.interval = createBarChartRace(data, self.top_n, self.tickDuration);
             }
           });
         },
