@@ -89,7 +89,8 @@
                   <div class="form-group text-center">
                     <button type="button" v-if="!csv_data" class="btn btn-outline-primary disabled">Generate Bar Chart
                       Race</button>
-                    <button type="submit" v-if="csv_data" class="btn btn-primary">Generate Bar Chart Race</button>
+                    <button type="submit" v-if="csv_data" class="btn btn-primary" id="generate">Generate Bar Chart
+                      Race</button>
                   </div>
                 </form>
               </div>
@@ -283,119 +284,6 @@
     crossorigin="anonymous"></script>
   <script src="js/barchartrace.js"></script>
   <script>
-    const app = new Vue({
-      el: '#app',
-      data: {
-        errors: [],
-        file: null,
-        csv_data: null,
-        interval: null,
-        duration: 20,
-        tickDuration: 500,
-        top_n: 10,
-        title: "My bar chart",
-        fileplaceholder: "Choose file"
-      },
-      methods: {
-        loadExample: function (setting_name) {
-          var self = this;
-          self.duration = settings[setting_name].duration;
-          self.top_n = settings[setting_name]['top_n'];
-          self.title = settings[setting_name].title;
-          Papa.parse(settings[setting_name].url, {
-            download: true,
-            header: true,
-            skipEmptyLines: true,
-            complete: function (results) {
-              if (Object.keys(results.data[0]).length === 3) {
-                results.data = reshapeData(results.data)
-              }
-              self.csv_data = results.data;
-            }
-          }
-          )
-        },
-        loadFile: function (e) {
-          var self = this;
-          this.file = e.target.files[0];
-          this.fileplaceholder = this.file.name;
-          Papa.parse(self.file, {
-            header: true,
-            encoding: "UTF-8",
-            skipEmptyLines: true,
-            complete: function (results) {
-              if (Object.keys(results.data[0]).length === 3) {
-                results.data = reshapeData(results.data)
-              }
-              self.csv_data = results.data;
-              self.top_n = Math.min(20, Object.keys(self.csv_data[0]).length - 1)
-            }
-          });
-
-
-        },
-        stopRace: function () {
-          if (!this.interval) {
-            return
-          } else {
-            this.interval.stop()
-          }
-        },
-        checkForm: function (e) {
-          var self = this;
-          if (self.interval !== null) {
-            self.interval.stop()
-          }
-          if (!this.csv_data) {
-            return
-          }
-          if (self.tickDuration && self.top_n) {
-            e.preventDefault();
-            this.top_n = parseInt(self.top_n);
-            this.duration = parseInt(self.duration);
-            this.tickDuration = self.duration / self.csv_data.length * 1000
-            let chartDiv = document.getElementById("chartDiv");
-            var data = JSON.parse(JSON.stringify(self.csv_data))
-            self.interval = createBarChartRace(data, self.top_n, self.tickDuration);
-          }
-
-          self.errors = [];
-
-          if (!self.csv_data) {
-            self.errors.push('csv file is required');
-          }
-          if (!self.tickDuration) {
-            self.errors.push('Time between frames required.');
-          }
-          if (!self.top_n) {
-            self.errors.push('Number of bars to display required.');
-          }
-          e.preventDefault();
-          window.scrollTo({ top: $("#chart-card").offset().top - 10, behavior: 'smooth' });
-        }
-      },
-      delimiters: ["((", "))"]
-
-    });
-
-
-    /*
-    reshapes the data from the second accepted csv format to the other :
-    (one row per contender and per date) => (one row per date (ordered) and one column per contender.)
-    */
-    function reshapeData(data) {
-      // groupby dates (first column)
-      column_names = new Set(data.map(x => x[Object.keys(x)[1]]));
-      const grouped_by_date = _.groupBy(data, (e) => e[Object.keys(e)[0]]);
-      return Object.keys(grouped_by_date).sort().map((k) => {
-        item = { 'date': k };
-        column_names.forEach((n) => item[n] = 0);
-        grouped_by_date[k].forEach((e) => item[e[Object.keys(e)[1]]] = e[Object.keys(e)[2]]);
-        return item
-      })
-
-    }
-
     // settings for the example data
     const settings = {
       "covid19": {
@@ -424,7 +312,118 @@
       }
     }
 
+    const app = new Vue({
+      el: '#app',
+      data: {
+        errors: [],
+        file: null,
+        csv_data: null,
+        interval: null,
+        duration: 20,
+        tickDuration: 500,
+        top_n: 10,
+        title: "My bar chart",
+        fileplaceholder: "Choose file"
+      },
+      created: async function () {
+        this.loadExample('stackoverflow')
+      },
+      methods: {
+        loadExample: async function (setting_name) {
+          var self = this;
+          self.duration = settings[setting_name].duration;
+          self.top_n = settings[setting_name]['top_n'];
+          self.title = settings[setting_name].title;
+          Papa.parse(settings[setting_name].url, {
+            download: true,
+            header: true,
+            skipEmptyLines: true,
+            complete: function (results) {
+              if (Object.keys(results.data[0]).length === 3) {
+                results.data = reshapeData(results.data)
+              }
+              self.csv_data = results.data;
+              self.interval = createBarChartRace(self.csv_data, self.top_n, self.tickDuration);
+              window.scrollTo({ top: $("#chart-card").offset().top - 10, behavior: 'smooth' });
+            }
+          })
+        },
+        loadFile: function (e) {
+          var self = this;
+          this.file = e.target.files[0];
+          this.fileplaceholder = this.file.name;
+          Papa.parse(self.file, {
+            header: true,
+            encoding: "UTF-8",
+            skipEmptyLines: true,
+            complete: function (results) {
+              if (Object.keys(results.data[0]).length === 3) {
+                results.data = reshapeData(results.data)
+              }
+              self.csv_data = results.data;
+              console.log(self.csv_data)
+              self.top_n = Math.min(20, Object.keys(self.csv_data[0]).length - 1)
+            }
+          });
+        },
+        stopRace: function () {
+          if (!this.interval) {
+            return
+          } else {
+            this.interval.stop()
+          }
+        },
+        checkForm: function (e) {
+          var self = this;
+          if (self.interval !== null) {
+            self.interval.stop()
+          }
+          if (!this.csv_data) {
+            return
+          }
+          if (self.tickDuration && self.top_n) {
+            e.preventDefault();
+            this.top_n = parseInt(self.top_n);
+            this.duration = parseInt(self.duration);
+            this.tickDuration = self.duration / self.csv_data.length * 1000
+            let chartDiv = document.getElementById("chartDiv");
+            var data = JSON.parse(JSON.stringify(self.csv_data))
+            self.interval = createBarChartRace(data, self.top_n, self.tickDuration);
+          }
+          self.errors = [];
+          if (!self.csv_data) {
+            self.errors.push('csv file is required');
+          }
+          if (!self.tickDuration) {
+            self.errors.push('Time between frames required.');
+          }
+          if (!self.top_n) {
+            self.errors.push('Number of bars to display required.');
+          }
+          e.preventDefault();
+          window.scrollTo({ top: $("#chart-card").offset().top - 10, behavior: 'smooth' });
+        }
+      },
+      delimiters: ["((", "))"]
+    });
 
+
+    /*
+    reshapes the data from the second accepted csv format to the other :
+    (one row per contender and per date) => (one row per date (ordered) and one column per contender.)
+    */
+    function reshapeData(data) {
+      // groupby dates (first column)
+      column_names = new Set(data.map(x => x[Object.keys(x)[1]]));
+      const grouped_by_date = _.groupBy(data, (e) => e[Object.keys(e)[0]]);
+      return Object.keys(grouped_by_date).sort().map((k) => {
+        item = { 'date': k };
+        column_names.forEach((n) => item[n] = 0);
+        grouped_by_date[k].forEach((e) => item[e[Object.keys(e)[1]]] = e[Object.keys(e)[2]]);
+        return item
+      })
+
+    }
   </script>
 </body>
 
