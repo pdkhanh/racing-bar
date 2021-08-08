@@ -65,7 +65,15 @@ function setIconPath(iconPath){
 }
 
 function setIconUrl(iconUrl){
-    icon = iconUrl
+    if (iconUrl) {
+        icon = iconUrl
+        xLabel = -30
+        xLabelValue = 13
+    } else {
+        xLabel = -13
+        xLabelValue = 5
+        icon = null
+    }
 }
 
 function createBarChartRace(data, top_n, tickDuration) {
